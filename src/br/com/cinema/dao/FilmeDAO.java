@@ -69,4 +69,28 @@ public class FilmeDAO {
 		
 		return lista;
 	}
+	
+	public void apaga(int id){
+		
+		Connection c = new ConnectionFactory().getConnection();
+		
+		String sql = "DELETE FROM FILME WHERE id=?;";
+		
+		try {
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setInt(1, id);
+			
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
 }

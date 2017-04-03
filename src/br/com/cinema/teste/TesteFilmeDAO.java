@@ -12,9 +12,9 @@ public class TesteFilmeDAO {
 
 		FilmeDAO dao = new FilmeDAO();
 		
-		List<Filme> lista = dao.listaFilme();
+		//List<Filme> lista = dao.listaFilme();
 		
-		System.out.println(lista);
+		//dao.apaga(2);
 	}
 
 }

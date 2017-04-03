@@ -10,20 +10,21 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import br.com.cinema.connection.ConnectionFactory;
 import br.com.cinema.modelo.Filme;
 
 public class Principal {
 	
 	public static void main(String[] args) throws SQLException, ClassNotFoundException {
 		
-		Filme filme = new Filme("O lado bom da vida", 100, "Drama");
+		Filme filme = new Filme("Velozes e Furiosos", 120, "Ação");
 		
 		Connection con = null;
 		
 		try{
 			
 			//DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-			con = DriverManager.getConnection("jdbc:mysql://localhost/cinema", "root", "kiko");
+			con = new ConnectionFactory().getConnection();
 			
 			String sql = "INSERT INTO FILME (titulo, duracao, genero) values (?,?,?);";
 			

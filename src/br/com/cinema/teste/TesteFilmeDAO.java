@@ -15,6 +15,8 @@ public class TesteFilmeDAO {
 		//List<Filme> lista = dao.listaFilme();
 		
 		//dao.apaga(2);
+		
+		System.out.println(dao.getFilme(3));
 	}
 
 }

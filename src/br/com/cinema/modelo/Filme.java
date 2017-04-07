@@ -11,6 +11,8 @@ public class Filme {
 	private int duracao;
 	private String genero;
 	private List<Ator> lista = new ArrayList<>();
+	
+	public Filme(){}
 
 	public Filme(String titulo, int duracao, String genero) {
 		this.titulo = titulo;
@@ -48,7 +50,7 @@ public class Filme {
 	
 	@Override
 	public String toString() {
-		return "Titulo: " + this.titulo + " Duracao: " + duracao + "m Genero: " + genero;
+		return "Titulo: " + this.titulo + " Duracao: " + duracao + "m Genero: " + genero + "\nAtores: " + this.lista;
 	}
 
 }

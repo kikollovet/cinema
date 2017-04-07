@@ -30,6 +30,10 @@ public class AtorDAO {
 		}
 	}
 	
+	public void getAtor(int id) {
+		
+	}
+	
 	public List<Ator> listaAtor() {
 		
 		List<Ator> lista = new ArrayList<>();

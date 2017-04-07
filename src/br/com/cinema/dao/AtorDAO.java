@@ -37,7 +37,7 @@ public class AtorDAO {
 			
 			String sql = "select * from ator where id = ?;";
 			
-			Ator ator = new Ator();
+			Ator ator = null;
 			
 			PreparedStatement stmt = c.prepareStatement(sql);
 			stmt.setInt(1, id);

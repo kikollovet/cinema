@@ -40,7 +40,7 @@ public class FilmeDAO {
 			
 			String sql = "select * from filme where id = ?;";
 			
-			Filme filme = new Filme();
+			Filme filme = null;
 			
 			PreparedStatement stmt = c.prepareStatement(sql);
 			stmt.setInt(1, id);

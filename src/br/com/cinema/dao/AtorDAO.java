@@ -9,6 +9,7 @@ import java.util.List;
 
 import br.com.cinema.connection.ConnectionFactory;
 import br.com.cinema.modelo.Ator;
+import br.com.cinema.modelo.Filme;
 
 public class AtorDAO {
 
@@ -30,8 +31,52 @@ public class AtorDAO {
 		}
 	}
 	
-	public void getAtor(int id) {
+	public Ator getAtor(int id) {
 		
+		try(Connection c = new ConnectionFactory().getConnection()){
+			
+			String sql = "select * from ator where id = ?;";
+			
+			Ator ator = new Ator();
+			
+			PreparedStatement stmt = c.prepareStatement(sql);
+			stmt.setInt(1, id);
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()){
+				int idAtor = rs.getInt("id");
+				String nome = rs.getString("nome");
+				int idade = rs.getInt("idade");
+				String genero = rs.getString("genero");
+				
+				ator = new Ator(nome, idade, genero);
+				ator.setId(idAtor);
+			}
+			
+			String sql2 = "select * from filme f join filme_ator fa on f.id = fa.id_filme join ator a on a.id = fa.id_ator where a.id = ?;";
+			
+			stmt = c.prepareStatement(sql2);
+			stmt.setInt(1, id);
+			
+			rs = stmt.executeQuery();
+			
+			while(rs.next()){
+				int idFilme = rs.getInt("f.id");
+				String titulo = rs.getString("f.titulo");
+				int duracao = rs.getInt("f.duracao");
+				String generoFilme = rs.getString("f.genero");
+				
+				Filme filme = new Filme(titulo, duracao, generoFilme);
+				filme.setId(idFilme);
+				
+				ator.adicionaFilme(filme);
+			}
+			
+			return ator;
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public List<Ator> listaAtor() {

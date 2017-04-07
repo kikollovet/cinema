@@ -13,7 +13,9 @@ public class TesteAtorDAO {
 		
 		//atorDAO.adiciona(ator);
 		
-		System.out.println(atorDAO.listaAtor());
+		//System.out.println(atorDAO.listaAtor());
+		
+		System.out.println(atorDAO.getAtor(2));
 	}
 
 }

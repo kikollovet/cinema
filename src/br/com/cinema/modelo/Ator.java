@@ -1,10 +1,16 @@
 package br.com.cinema.modelo;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Ator {
 
+	private int id;
 	private String nome;
 	private int idade;
 	private String genero;
+	private List<Filme> lista = new ArrayList<>();
 
 	public Ator(String nome, int idade, String genero) {
 		this.nome = nome;
@@ -12,6 +18,14 @@ public class Ator {
 		this.genero = genero;
 	}
 
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getNome() {
 		return nome;
 	}
@@ -22,6 +36,14 @@ public class Ator {
 
 	public String getGenero() {
 		return genero;
+	}
+	
+	public List<Filme> getLista() {
+		return Collections.unmodifiableList(this.lista);
+	}
+	
+	public void adicionaFilme(Filme filme){
+		this.lista.add(filme);
 	}
 	
 	@Override

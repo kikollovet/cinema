@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,6 +140,32 @@ public class FilmeDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+		}
+		
+	}
+
+	public void adicionaFilmeAtor(Filme filme) {
+		
+		try(Connection c = new ConnectionFactory().getConnection()) {
+			
+			int idFilme = 0;
+			
+			String sql = "INSERT INTO FILME (titulo, duracao, genero) values (?,?,?);";
+			
+			PreparedStatement stmt = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, filme.getTitulo());
+			stmt.setInt(2, filme.getDuracao());
+			stmt.setString(3, filme.getGenero());
+			
+			ResultSet rs = stmt.getGeneratedKeys();
+			
+			if(rs.next()){
+				idFilme = rs.getInt(1);
+			}
+					
+			
+		} catch(SQLException e){
+			
 		}
 		
 	}

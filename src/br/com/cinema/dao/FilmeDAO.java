@@ -156,11 +156,37 @@ public class FilmeDAO {
 			stmt.setString(1, filme.getTitulo());
 			stmt.setInt(2, filme.getDuracao());
 			stmt.setString(3, filme.getGenero());
+			stmt.execute();
 			
 			ResultSet rs = stmt.getGeneratedKeys();
 			
 			if(rs.next()){
 				idFilme = rs.getInt(1);
+			}
+			
+			for (Ator ator : filme.getLista()) {
+				int idAtor = 0;
+				
+				String sql2 = "INSERT INTO ATOR (nome, idade, genero) values (?,?,?);";
+				
+				stmt = c.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
+				stmt.setString(1, ator.getNome());
+				stmt.setInt(2, ator.getIdade());
+				stmt.setString(3, ator.getGenero());
+				stmt.execute();
+				
+				rs = stmt.getGeneratedKeys();
+				
+				if(rs.next()){
+					idAtor = rs.getInt(1);
+				}
+				
+				String sql3 = "INSERT INTO filme_ator (id_filme, id_ator) values (?,?);";
+				
+				stmt = c.prepareStatement(sql3);
+				stmt.setInt(1, idFilme);
+				stmt.setInt(2, idAtor);
+				stmt.execute();
 			}
 					
 			

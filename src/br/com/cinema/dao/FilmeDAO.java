@@ -181,4 +181,37 @@ public class FilmeDAO {
 		}
 		
 	}
+	
+	public void adicionaTabelaFilmeAtor(Filme filme){
+		
+		try{
+			int idFilme = 0;
+			
+			String sql = "INSERT INTO FILME (titulo, duracao, genero) values (?,?,?);";
+			
+			PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			stmt.setString(1, filme.getTitulo());
+			stmt.setInt(2, filme.getDuracao());
+			stmt.setString(3, filme.getGenero());
+			stmt.execute();
+			
+			ResultSet rs = stmt.getGeneratedKeys();
+			
+			if(rs.next()){
+				idFilme = rs.getInt(1);
+			}
+			
+			for (Ator ator : filme.getLista()){
+				String sql2 = "INSERT INTO filme_ator (id_filme, id_ator) values (?,?);";
+				
+				stmt = this.connection.prepareStatement(sql2);
+				stmt.setInt(1, idFilme);
+				stmt.setInt(2, ator.getId());
+				stmt.execute();
+			}
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

@@ -14,14 +14,18 @@ import br.com.cinema.modelo.Filme;
 
 public class FilmeDAO {
 
+	private Connection connection;
+	
+	public FilmeDAO(Connection connection){
+		this.connection = connection;
+	}
+	
 	public void adiciona(Filme filme) throws SQLException{
-		
-		Connection c = new ConnectionFactory().getConnection();
 		
 		String sql = "INSERT INTO FILME (titulo, duracao, genero) values (?,?,?);";
 		
 		try {
-			PreparedStatement stmt = c.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			stmt.setString(1, filme.getTitulo());
 			stmt.setInt(2, filme.getDuracao());
 			stmt.setString(3, filme.getGenero());
@@ -30,20 +34,18 @@ public class FilmeDAO {
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			c.close();
-		}
+		} 
 	}
 	
 	public Filme getFilme(int id) {
 		
-		try(Connection c = new ConnectionFactory().getConnection()) {
+		try {
 			
 			String sql = "select * from filme where id = ?;";
 			
 			Filme filme = null;
 			
-			PreparedStatement stmt = c.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			stmt.setInt(1, id);
 			
 			ResultSet rs = stmt.executeQuery();
@@ -60,7 +62,7 @@ public class FilmeDAO {
 			
 			String sql2 = "select * from filme f join filme_ator fa on f.id = fa.id_filme join ator a on a.id = fa.id_ator where f.id = ?;";
 			
-			stmt = c.prepareStatement(sql2);
+			stmt = this.connection.prepareStatement(sql2);
 			stmt.setInt(1, id);
 			
 			rs = stmt.executeQuery();
@@ -87,12 +89,10 @@ public class FilmeDAO {
 		
 		List<Filme> lista = new ArrayList<>();
 		
-		Connection c = new ConnectionFactory().getConnection();
-		
 		String sql = "SELECT * FROM FILME;";
 		
 		try {
-			PreparedStatement stmt = c.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			
 			ResultSet rs = stmt.executeQuery();
 			
@@ -109,50 +109,36 @@ public class FilmeDAO {
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				c.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		} 
 		
 		return lista;
 	}
 	
 	public void apaga(int id){
 		
-		Connection c = new ConnectionFactory().getConnection();
-		
 		String sql = "DELETE FROM FILME WHERE id=?;";
 		
 		try {
-			PreparedStatement stmt = c.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			stmt.setInt(1, id);
 			
 			stmt.execute();
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				c.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		
 	}
 
 	public void adicionaFilmeAtor(Filme filme) {
 		
-		try(Connection c = new ConnectionFactory().getConnection()) {
+		try {
 			
 			int idFilme = 0;
 			
 			String sql = "INSERT INTO FILME (titulo, duracao, genero) values (?,?,?);";
 			
-			PreparedStatement stmt = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, filme.getTitulo());
 			stmt.setInt(2, filme.getDuracao());
 			stmt.setString(3, filme.getGenero());
@@ -169,7 +155,7 @@ public class FilmeDAO {
 				
 				String sql2 = "INSERT INTO ATOR (nome, idade, genero) values (?,?,?);";
 				
-				stmt = c.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
+				stmt = this.connection.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
 				stmt.setString(1, ator.getNome());
 				stmt.setInt(2, ator.getIdade());
 				stmt.setString(3, ator.getGenero());
@@ -183,7 +169,7 @@ public class FilmeDAO {
 				
 				String sql3 = "INSERT INTO filme_ator (id_filme, id_ator) values (?,?);";
 				
-				stmt = c.prepareStatement(sql3);
+				stmt = this.connection.prepareStatement(sql3);
 				stmt.setInt(1, idFilme);
 				stmt.setInt(2, idAtor);
 				stmt.execute();
@@ -191,7 +177,7 @@ public class FilmeDAO {
 					
 			
 		} catch(SQLException e){
-			
+			throw new RuntimeException(e);
 		}
 		
 	}

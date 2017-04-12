@@ -7,19 +7,24 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.cinema.connection.ConnectionFactory;
 import br.com.cinema.modelo.Ator;
 import br.com.cinema.modelo.Filme;
 
 public class AtorDAO {
 
+	private Connection connection;
+	
+	public AtorDAO(Connection connection){
+		this.connection = connection;
+	}
+	
 	public void adiciona(Ator ator){
 		
-		try(Connection c = new ConnectionFactory().getConnection()){
+		try{
 			
 			String sql = "INSERT INTO ATOR (nome, idade, genero) values (?,?,?);";
 			
-			PreparedStatement stmt = c.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			stmt.setString(1, ator.getNome());
 			stmt.setInt(2, ator.getIdade());
 			stmt.setString(3, ator.getGenero());
@@ -33,13 +38,13 @@ public class AtorDAO {
 	
 	public Ator getAtor(int id) {
 		
-		try(Connection c = new ConnectionFactory().getConnection()){
+		try{
 			
 			String sql = "select * from ator where id = ?;";
 			
 			Ator ator = null;
 			
-			PreparedStatement stmt = c.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			stmt.setInt(1, id);
 			
 			ResultSet rs = stmt.executeQuery();
@@ -56,7 +61,7 @@ public class AtorDAO {
 			
 			String sql2 = "select * from filme f join filme_ator fa on f.id = fa.id_filme join ator a on a.id = fa.id_ator where a.id = ?;";
 			
-			stmt = c.prepareStatement(sql2);
+			stmt = this.connection.prepareStatement(sql2);
 			stmt.setInt(1, id);
 			
 			rs = stmt.executeQuery();
@@ -83,11 +88,11 @@ public class AtorDAO {
 		
 		List<Ator> lista = new ArrayList<>();
 		
-		try (Connection c = new ConnectionFactory().getConnection()){
+		try{
 			
 			String sql = "SELECT * FROM ATOR;";
 			
-			PreparedStatement stmt = c.prepareStatement(sql);
+			PreparedStatement stmt = this.connection.prepareStatement(sql);
 			
 			ResultSet rs = stmt.executeQuery();
 			
